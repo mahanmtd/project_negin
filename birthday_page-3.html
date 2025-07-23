@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #FDEFF2;
+      --btn-main: #E26176;
+      --text-dark: #245C2F;
+      --card-bg: #FFF9F5;
+      --error-red: #E74C3C;
+      --anim-speed: 4s;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+    h1, h2 { font-family: 'Playfair Display', serif; color: var(--btn-main); }
+    button, input { font-family: inherit; border: none; border-radius: 50px; padding: 0.8rem 1.2rem; font-size: 1rem; }
+    button { background: var(--btn-main); color: #fff; cursor: pointer; transition: filter 0.2s; }
+    button:hover { filter: brightness(1.1); }
+    section { display: none; width: 100%; min-height: 100vh; align-items: center; justify-content: center; }
+    section.active { display: flex; }
+    /* Page1 layout */
+    #page1 { flex-direction: column; text-align: center; }
+    #page1 .step { display: none; }
+    #page1 .step.active { display: block; }
+    #step1 h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    #step1 p { margin-bottom: 1rem; }
+    #step1 button { margin: 0 0.5rem; }
+    #noMsg, #nameError { color: var(--error-red); margin-top: 0.5rem; display: none; }
+    /* Name step */
+    #step2 p { margin-bottom: 1rem; }
+    #step2 input { width: 200px; margin-right: 0.5rem; }
+    @media (max-width: 600px) {
+      #step2 input { display: block; width: 180px; margin: 0 auto 1rem; }
+      #step2 button { width: 100%; max-width: 220px; }
+    }
+    /* Page2 layout */
+    #page2 { flex-direction: column; padding: 2rem; }
+    #gallery2 { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
+    .animated-photo { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); animation: float var(--anim-speed) ease-in-out infinite; }
+    .animated-photo:nth-child(even) { animation-delay: calc(var(--anim-speed)/2); }
+    @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
+    #letter2 { background: var(--card-bg); padding: 2rem; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 600px; width: 90%; line-height: 1.6; position: relative; direction: rtl; text-align: right; }
+    #letter2 .signature { font-style: italic; margin-top: 1rem; }
+    /* Hearts */
+    .heart { position: absolute; width: 16px; height: 16px; background: var(--btn-main); transform: rotate(45deg); opacity: 0.7; animation: floatHeart 6s linear infinite; }
+    .heart:before, .heart:after { content: ''; position: absolute; width: 16px; height: 16px; background: var(--btn-main); border-radius: 50%; }
+    .heart:before { top: -8px; left: 0; }
+    .heart:after { left: 8px; top: 0; }
+    @keyframes floatHeart { 0% { transform: translate(var(--x), var(--y)) rotate(45deg); opacity:0.7; } 100% { transform: translate(calc(var(--x)+150px), -200px) rotate(45deg); opacity:0; } }
+  </style>
+</head>
+<body>
+  <!-- Page 1 -->
+  <section id="page1" class="active">
+    <div id="step1" class="step active">
+      <h1>Hello dear User</h1>
+      <p>If you are KHEPEL, click on:</p>
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
+      <p id="noMsg">don't lie please</p>
+    </div>
+    <div id="step2" class="step">
+      <p>Enter the name of your favorite person to continue:</p>
+      <input type="text" id="nameInput" placeholder="e.g. Shadmehr" />
+      <button id="nameBtn">Go</button>
+      <p id="nameError">Oops, that's not it. Try again!</p>
+    </div>
+  </section>
+
+  <!-- Page 2 -->
+  <section id="page2">
+    <div id="gallery2">
+      <img src="photos/photo1.jpg" class="animated-photo">
+      <img src="photos/photo2.jpg" class="animated-photo">
+      <img src="photos/photo3.jpg" class="animated-photo">
+      <img src="photos/photo4.jpg" class="animated-photo">
+    </div>
+    <div id="letter2">
+      <p>.تولدت مبارک ببعی جون قشنگم. امیدوارم بهترین ها برات اتفاق بیفته و همیشه سلامت و موفق باشی. همیشه لبخند رو لبا و لپات باشه. خیلی خوشحالم که باهات آشنا شدم و الان همچین دوست مهربون و تپلی مثل تو دارم. بدون که برام خیلی ارزش داری و کلی دوستت دارم </p>
+      <p>میبوسمت</p>
+      <p>بازم تولدت مبارک</p>
+      <p class="signature">شادمهر</p>
+    </div>
+  </section>
+
+  <!-- Script -->
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const noMsg = document.getElementById('noMsg');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const nameBtn = document.getElementById('nameBtn');
+    const nameInput = document.getElementById('nameInput');
+    const nameError = document.getElementById('nameError');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+
+    yesBtn.addEventListener('click', () => {
+      noMsg.style.display = 'none';
+      step1.classList.remove('active');
+      step2.classList.add('active');
+    });
+    noBtn.addEventListener('click', () => {
+      noMsg.style.display = 'block';
+    });
+    nameBtn.addEventListener('click', () => {
+      const val = nameInput.value.trim().toLowerCase();
+      if (val === 'shadmehr') {
+        page1.classList.remove('active');
+        page2.classList.add('active');
+        launchHearts();
+      } else {
+        nameError.style.display = 'block';
+      }
+    });
+    nameInput.addEventListener('input', () => nameError.style.display = 'none');
+
+    function launchHearts() {
+      for (let i = 0; i < 12; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        const x = Math.random() * window.innerWidth + 'px';
+        const y = window.innerHeight + 'px';
+        heart.style.setProperty('--x', x);
+        heart.style.setProperty('--y', y);
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+  </script>
+</body>
+</html>
